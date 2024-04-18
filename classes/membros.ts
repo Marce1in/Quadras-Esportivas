@@ -1,8 +1,8 @@
 export class Membro {
-    public readonly id: number
+    public readonly id: string
     public nome: string
 
-    constructor(id: number, nome: string){
+    constructor(id: string, nome: string){
         this.id = id
         this.nome = nome
     }

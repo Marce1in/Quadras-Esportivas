@@ -1,5 +1,5 @@
 export class Quadra {
-    public readonly id: number
+    public readonly id: string
 
     public esporte: string
     public apelido: string | undefined
@@ -7,7 +7,7 @@ export class Quadra {
     private horarios: number[]
     private horariosReservados: number[]
 
-    constructor(id: number, esporte: string, [horarioInicial, horarioFinal]: [string, string], apelido?: string){
+    constructor(id: string, esporte: string, [horarioInicial, horarioFinal]: [string, string], apelido?: string){
         this.id = id
 
         this.esporte = esporte
@@ -61,16 +61,16 @@ export class Quadra {
         }
 
         if (str.length != 5)
-            throw Error("Horário inválido")
+            throw Error(`Horário inválido ${str}`)
         else if (str[2] != ":")
-            throw Error("Horário inválido")
+            throw Error(`Horário inválido ${str}`)
 
         const [hora, minuto] = this.pegarHoras(str) as [number, number]
 
         if (hora >= 24 || hora < 0 || hora == undefined)
-            throw Error("Hora inválida")
-        else if (minuto > 60 || minuto < 0 || hora == undefined)
-            throw Error("Minuto inválido")
+            throw Error(`Hora inválida ${hora}`)
+        else if (minuto > 60 || minuto < 0 || minuto == undefined)
+            throw Error(`Minuto inválido ${minuto}`)
     }
 
     public obterHorarios(flag: string = 'f'): number[] | string[]{
