@@ -23,7 +23,8 @@ export class Quadra {
 
         this.horariosReservados.push(...this.criarHorarios([horarioInicial, horarioFinal]))
 
-        //Organiza a array em ordem do menor para o maior
+        //Organiza a array em ordem do menor para o maior.
+        //É necessário para o método 'filtrarHorarios' funcionar corretamente!
         this.horarios.sort((x, y) => x - y)
     }
 
