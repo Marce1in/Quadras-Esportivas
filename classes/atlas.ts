@@ -8,7 +8,8 @@ import { Membro } from "./membros"
 /*
  * Atlas vem em homenagem ao titã da mitologia grega, Atlas.
  * Conhecido por carregar o mundo em suas costas, sua contraparte
- * nessa base de código serve como um pseudo-back-end.
+ * nessa base de código serve como um pseudo-back-end, para ligar
+ * as classes com o front-end.
 */
 
 export class Atlas{
@@ -27,7 +28,7 @@ export class Atlas{
 
 }
 
-//Uma pseudo-database, que salva seus dados no armazenamento do navegador
+//Uma pseudo-database, que salva seus dados no armazenamento interno do navegador
 class Db {
 
     public quadras: {[id: string]: Quadra}
@@ -58,6 +59,7 @@ class Db {
     }
 }
 
+//Permite rápido geramento randômico de data para a database
 class Gerador {
 
     private db: Db
@@ -105,7 +107,7 @@ class Gerador {
     }
 }
 
-//TODO
+//Sistema de autenticação e criação de contas
 class Contas {
     public sessao: string
 
