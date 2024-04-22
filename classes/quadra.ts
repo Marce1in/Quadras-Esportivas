@@ -1,5 +1,4 @@
 export class Quadra {
-    public readonly id: string
 
     public esporte: string
     public apelido: string | undefined
@@ -7,9 +6,7 @@ export class Quadra {
     private horarios: number[]
     private horariosReservados: number[]
 
-    constructor(id: string, esporte: string, [horarioInicial, horarioFinal]: [string, string], apelido?: string){
-        this.id = id
-
+    constructor(esporte: string, [horarioInicial, horarioFinal]: [string, string], apelido?: string){
         this.esporte = esporte
         this.apelido = apelido
 

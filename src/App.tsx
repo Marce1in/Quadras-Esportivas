@@ -1,48 +1,22 @@
-import {Init} from "../classes/init"
+import { Atlas } from '../classes/atlas.ts'
 
-const init = new Init
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Routes,
+} from "react-router-dom";
 
-function App() {
+function App({ atlas }: {atlas: Atlas}) {
+
+    const chaves = Object.keys(atlas.db.quadras)
+    const chavesM = Object.keys(atlas.db.membros)
 
     return (
         <>
-            <h1 className="text-9xl text-lime-500">Quadra esportivas</h1>
-            <br/>
-
-            {init.listaQuadras.map((item) => {
-
-                return (
-                    <>
-                        <span className="text-xl text-blue-500">
-                              A quadra {item.apelido} de {item.esporte} tem: <br/> 
-                              {item.obterHorarios().map((item) => item + ", ")} <br/>
-                              Horários Disponiveis <br/> <br/>
-                        </span>        
-                    </>
-                )
-            })}
-
-            {init.listaMembros.map((item) => {
-                return (
-                    <>
-                        <span className="text-xl text-red-500">
-                            O usuário {item.nome} Existe! <br/> <br/>
-                        </span>
-                    </>)
-            })}
-
-            {init.listaReservas.map((item) => {
-                return (
-                <>
-                    <span className="text-xl text-purple-500">
-                        <br/>
-                        O usuário {init.listaMembros.find((itemM) => itemM.id == item.idMembro)?.nome}<br/>
-                        Alugou a Quadra {init.listaQuadras.find((itemQ) => itemQ.id == item.idMembro)?.apelido}
-                        Entre os horários {item.horario.map((itemR) => itemR + ", ")}<br/>
-                        Na data {item.data}<br/>
-                    </span>
-                </>)
-            })}
+            {atlas.db.quadras[chaves[0]].obterHorarios().map((o)=> o+" ")}
+            {atlas.db.quadras[chaves[0]].apelido}
+            . {atlas.db.membros[chavesM[0]].nome}, App
         </>
     )
 }
