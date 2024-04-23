@@ -72,8 +72,12 @@ class Gerador {
 
         for (let i = 0; i < NUM_QUADRAS_GERADAS; i++){
             const esporte: string = faker.helpers.arrayElement(["Futebol", "Basquete", "Volêi", "Padel"])
-            const apelido: string = fakerPT_BR.location.city()
-            const horarios: [string, string] = ["08:00","20:30"]
+            const apelido: string = faker.lorem.words({min: 1, max: 3})
+
+            const horarioI = faker.helpers.arrayElement(["07:00", "08:00", "10:00", "11:30"])
+            const horarioF = faker.helpers.arrayElement(["19:30", "20:00", "22:00", "18:00"])
+            const horarios: [string, string] = [horarioI, horarioF]
+
             const intervalo1: [string, string] = ["12:00", "13:30"]
             const intervalo2: [string, string] = ["16:30", "17:30"]
 
