@@ -1,4 +1,4 @@
-import { Atlas } from '../classes/atlas.ts'
+import  Atlas  from '../classes/atlas.ts'
 
 const atlas: Atlas = new Atlas
 

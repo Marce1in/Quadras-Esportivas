@@ -12,7 +12,7 @@ import { Membro } from "./membros"
  * as classes com o front-end.
 */
 
-export class Atlas{
+export default class Atlas{
 
 
     public db: Db

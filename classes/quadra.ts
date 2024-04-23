@@ -4,7 +4,7 @@ export class Quadra {
     public apelido: string | undefined
 
     private horarios: number[]
-    private horariosReservados: number[]
+    private horariosReservados: {[data: string]: number[]}
 
     constructor(esporte: string, [horarioInicial, horarioFinal]: [string, string], apelido?: string){
         this.esporte = esporte
@@ -12,23 +12,30 @@ export class Quadra {
 
         this.horarios = this.criarHorarios([horarioInicial, horarioFinal]) 
 
-        this.horariosReservados = []
+        this.horariosReservados = {}
     }
 
 
-    public reservar([horarioInicial, horarioFinal]: [string, string]){
+    public reservar([horarioInicial, horarioFinal]: [string, string], data:string){
 
-        this.horariosReservados.push(...this.criarHorarios([horarioInicial, horarioFinal]))
+        if (this.horariosReservados[data] != undefined){
 
-        //Organiza a array em ordem do menor para o maior.
-        //É necessário para o método 'filtrarHorarios' funcionar corretamente!
-        this.horarios.sort((x, y) => x - y)
+            this.horariosReservados[data].push(...this.criarHorarios([horarioInicial, horarioFinal]))
+
+            //Organiza a array em ordem do menor para o maior.
+            //É necessário para o método 'filtrarHorarios' funcionar corretamente!
+            this.horariosReservados[data].sort((x, y) => x - y)
+
+            return
+        }
+
+        this.horariosReservados[data] = this.criarHorarios([horarioInicial, horarioFinal])
     }
 
 
-    public deletarReserva([horarioInicial, horarioFinal]: [string, string]){
+    public deletarReserva([horarioInicial, horarioFinal]: [string, string], data: string){
 
-        this.deletarHorarios([horarioInicial, horarioFinal], this.horariosReservados)
+        this.deletarHorarios([horarioInicial, horarioFinal], this.horariosReservados[data])
     }
 
 
@@ -38,28 +45,31 @@ export class Quadra {
     }
 
 
-    public recriarHorarios([horarioInicial, horarioFinal]: [string, string], recriar: boolean = true){
-
-        if (recriar){
-            this.horariosReservados = []
-        }
+    public recriarHorarios([horarioInicial, horarioFinal]: [string, string]){
 
         this.horarios = this.criarHorarios([horarioInicial, horarioFinal])
     }
 
 
-    public resetarHorariosReservados(){
-        this.horariosReservados = []
+    public resetarHorariosReservados(data: string){
+        this.horariosReservados[data] = []
     }
 
 
-    public obterHorarios(formatar: boolean = true, filtrar: boolean = false): number[] | string[]{
+    //Mano, PQ OS TIPOS TEM Q TER NOMES TÃO GRANDES, sério, 'boolean'? 7 L.E.T.R.A.S??
+    //
+    //Em resumo, para "filtrarHorarios" funcionar ele precisa de uma data, por isso
+    //filtrar e data são passados como uma array, para o desenvolvedor ser obrigado
+    //a passar os dois se quiser filtrar algo.
+    public obterHorarios(formatar: boolean = true, [filtrar, data]: [boolean, string?] = [false, undefined]): number[] | string[]{
 
         let horarios: number[];
 
         if(filtrar){
+            if(data == undefined)
+                throw Error("Erro! a opção filtrar precisa de uma data!")
 
-            horarios = this.filtrarHorarios(this.horarios, this.horariosReservados)
+            horarios = this.filtrarHorarios(this.horarios, this.horariosReservados[data])
         } 
         else {
             horarios = [...this.horarios]
@@ -75,13 +85,13 @@ export class Quadra {
     }
 
 
-    public obterHorariosReservados(formatar: boolean = true): number[] | string[]{
+    public obterHorariosReservados(formatar: boolean = true, data: string): number[] | string[]{
 
         if(formatar){
-            return this.formatarHorarios(this.horariosReservados)
+            return this.formatarHorarios(this.horariosReservados[data])
         }
 
-        return [...this.horariosReservados]
+        return [...this.horariosReservados[data]]
     }
 
 
@@ -191,6 +201,9 @@ export class Quadra {
 
     //Filtra com complexidade linear, O(n)
     private filtrarHorarios(horarios: number[], filtro: number[]): number[]{
+
+        if (filtro == undefined)
+            throw Error("Erro! não existe nenhum horário reservado nessa data!")
 
         let i: number = 0;
 

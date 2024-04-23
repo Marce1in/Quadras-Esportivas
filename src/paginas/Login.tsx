@@ -1,4 +1,4 @@
-import { Atlas } from '../../classes/atlas.ts'
+import  Atlas  from '../../classes/atlas.ts'
 
 function Login({atlas}: {atlas: Atlas}){
     return (
