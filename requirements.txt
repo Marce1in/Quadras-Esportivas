@@ -1,0 +1,2 @@
+npm i -D typescript jest @types/jest ts-jest vitest
+npm i "pra instalar mais alguma coisa q possa estar faltando"
