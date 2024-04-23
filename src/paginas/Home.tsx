@@ -1,6 +1,9 @@
 import { Atlas } from '../../classes/atlas.ts'
+import { ReactNode, useState } from 'react'
 
 function Home({atlas}: {atlas: Atlas}){
+
+    const [modal, setModal] = useState(false)
 
     const quadras = Object.keys(atlas.db.quadras).map((id)=>{
         
@@ -10,6 +13,7 @@ function Home({atlas}: {atlas: Atlas}){
 
     return (
         <>
+            <button className="btn btn-primary" onClick={() => setModal(true)}>BOTÃO DE TESTE</button>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[4vw] justify-items-center p-[5vw]'>
                 {quadras.map((item)=>{
                     return (
@@ -21,20 +25,35 @@ function Home({atlas}: {atlas: Atlas}){
                     )
                 })}
             </div>
+
+            <Modal openModal={modal} closeModal={() => setModal(false)}> 
+                <div>Olá mundo CARALHO</div>
+            </Modal>
         </>
     )
 }
 
-function Modal(){
+import { useEffect, useRef } from "react"
+
+function Modal({openModal, closeModal, children}: {openModal: boolean, closeModal: () => void, children: ReactNode}){
+    const ref = useRef<HTMLDialogElement>(null)
+
+    useEffect(() => {
+        if (openModal) {
+            ref.current?.showModal()
+        }
+        else {
+            ref.current?.close()
+        }
+
+    }, [openModal])
+
     return (
         <>
-            <dialog className="modal">
+            <dialog className="modal" ref={ref} onCancel={closeModal}>
                 <div className="modal-box">
-                    <form method="dialog">
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                    </form>
-                    <h3 className="font-bold text-lg">Hello!</h3>
-                    <p className="py-4">Press ESC key or click on ✕ button to close</p>
+                    <button onClick={closeModal} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    {children}
                 </div>
             </dialog>
         </>
