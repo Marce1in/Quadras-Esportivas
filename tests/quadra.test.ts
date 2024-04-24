@@ -14,7 +14,6 @@ describe('Testando classe quadra', () => {
         expect(quadra.apelido).toBe('Campo 1');
         expect(quadra.horarios).toEqual(quadra.criarHorarios(['08:00', '10:00']));
         expect(quadra.horariosReservados).toEqual({});
-        expect
     });
 
     it('Deve reservar horario corretamente', () => {
@@ -44,12 +43,14 @@ describe('Testando classe quadra', () => {
         expect(quadra.horariosReservados['2021-10-10']).toEqual([]);
     });
 
-    //aqui é pra ficar as funções de obter horarios
+    it('deve obter horarios corretamente', () => {
+        expect(quadra.obterHorarios()).toEqual(quadra.formatarHorarios(quadra.horarios));
+    });
 
-
-
-
-    //--------------------obter Horários--------------------x
+    it('deve obter horarios reservados corretamente', () => {
+        quadra.reservar(['08:00', '09:00'], '2021-10-10');
+        expect(quadra.obterHorariosReservados('2021-10-10')).toEqual(quadra.formatarHorarios(quadra.horariosReservados['2021-10-10']));
+    })
 
     it('deve deletar horarios corretamente', () => {
         quadra.deletarHorarios(['08:00', '09:00'], [8, 9]);
