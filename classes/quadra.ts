@@ -172,9 +172,9 @@ export class Quadra {
         }
 
         if (str.length != 5)
-        throw Error(`Horário inválido ${str}`)
+        throw Error("Horário inválido, tamanho inválido")
         else if (str[2] != ":")
-        throw Error(`Horário inválido ${str}`)
+        throw Error("Horário inválido, falta ':'")
 
         const [hora, minuto] = this.pegarHoras(str) as [number, number]
 

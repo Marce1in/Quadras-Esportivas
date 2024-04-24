@@ -44,7 +44,7 @@ describe('Testando classe quadra', () => {
         expect(quadra.horariosReservados['2021-10-10']).toEqual([]);
     });
 
-    //aqui é pra ficar as funções de obter horarios e horarios reservados
+    //aqui é pra ficar as funções de obter horarios
 
 
 
@@ -60,8 +60,24 @@ describe('Testando classe quadra', () => {
         expect(quadra.criarHorarios(['08:00', '09:00'])).toEqual([480, 510, 540]);
     });
 
-    it('transformar string em array corretamente', () => {
-        expect(quadra.transformarStringEmArray('08:00')).toEqual([8, 0]);
+    it('deve pegar horas corretamente', () => {
+        expect(quadra.pegarHoras(["08:00"])).toEqual([8]);
+    });
+
+    it('deve validar horas corretemente', () => {
+        expect(quadra.validarHoras(["1230"])).toThrowError("Horário inválido, tamanho inválido");
     });
     
+    it('deve formatar horarios corretamente', () => {
+        expect(quadra.formatarHorarios([480, 510, 540])).toEqual(["08:00", "08:30", "09:00"]);
+    });
+
+    it('deve filtrar horarios corretamente', () => {
+        quadra.reservar(['08:00', '09:00'], '2021-10-10');
+        expect(quadra.filtrarHorarios([480, 510, 540], [480, 510])).toEqual([510, 540]);
+    });
+
+    it('deve adicionar zeros corretamente', () => {
+        expect(quadra.adicionarZero(8)).toBe("08");
+    });
 })
