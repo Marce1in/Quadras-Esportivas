@@ -26,7 +26,7 @@ import  Registro  from './paginas/Registro.tsx'
 import  Admin  from './paginas/Admin.tsx'
 
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Route,
     Routes,
 } from "react-router-dom";
@@ -36,7 +36,7 @@ function App() {
     return (
         <>
 
-            <Router basename='/Quadras-Esportivas'>
+            <Router>
                 <Routes>
                     <Route path="/" element={<Home atlas={atlas}/>} />           
                     <Route path="/login" element={<Login atlas={atlas}/>} />           
