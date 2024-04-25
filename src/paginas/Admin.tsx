@@ -11,7 +11,7 @@ function Admin({atlas}: {atlas: Atlas}){
 
     //Usuários inválidos voltam para a página de login (vai hackear a vó)
     useEffect(()=>{
-        if(atlas.contas.sessao == "" || !atlas.db.membros[atlas.contas.sessao].admin){
+        if(atlas.contas.sessao == "" || atlas.db.membros[atlas.contas.sessao]?.admin == false){
             navegar('/login')
         }
     })
@@ -30,6 +30,11 @@ function Admin({atlas}: {atlas: Atlas}){
 
     function criarQuadra(data: any, reset: () => void) {
         const esporte: string = data.esporte
+        if(esporte ==  "Esporte"){
+            alert("Selecione um esporte!")
+            return
+        }
+
         const nome: string = data.nome
 
         //retorna o horário em segundos, não sei como funciona, copiei do stack overflow
@@ -69,6 +74,7 @@ function Admin({atlas}: {atlas: Atlas}){
                 <Link to="/registro" className="btn">Ir para Registro</Link>
             </div>
 
+
             <input 
                 type="range" 
                 min="1" 
@@ -77,6 +83,7 @@ function Admin({atlas}: {atlas: Atlas}){
                 className="range w-[95vw]"
                 onChange={(e) => {setGerados(e.target.value)}}
             />
+
             <section className='flex flex-row flex-wrap items-center justify-center gap-5 w-full'>
                 <button 
                     className='btn btn-success w-min'
@@ -116,9 +123,10 @@ function Admin({atlas}: {atlas: Atlas}){
                     <select 
                         className="select select-bordered w-full max-w-xs" 
                         required
+                        defaultValue="Esporte"
                         {...register("esporte")}
                     >
-                        <option disabled selected>Esporte</option>
+                        <option disabled value="Esporte">Esporte</option>
                         <option>Vôlei</option>
                         <option>Futebol</option>
                         <option>Basquete</option>
@@ -213,6 +221,34 @@ function Admin({atlas}: {atlas: Atlas}){
                         </li>
                     )}
                 </ul>
+            </section>
+            <h2 className='card-title pt-10 text-center'>
+                Cuidado! DELETAR tudo geralmente quebra todo site,
+                <br/>
+                O site geralmente para de atualizar a UI, mude de página
+                para ver a sua cagada.
+                <br/>
+                Recarregar a página totalmente geralmente concerta tudo.
+            </h2>
+            <section className='flex flex-row flex-wrap items-center justify-center gap-5 w-full pb-10'>
+                <button 
+                    className='btn btn-success w-min'
+                    onClick={() => {atlas.db.DELETARTUDO('Q'); setUpdate(!update)}}
+                >
+                    Deletar TODAS Quadras
+                </button>
+                <button 
+                    className='btn btn-primary w-min'
+                    onClick={() => {atlas.db.DELETARTUDO('M'); setUpdate(!update)}}
+                >
+                    Deletar TODOS Membros
+                </button>
+                <button 
+                    className='btn btn-error w-min'
+                    onClick={() => {atlas.db.DELETARTUDO('R'); setUpdate(!update)}}
+                >
+                    Deletar TODAS Reservas
+                </button>
             </section>
         </main>
     )

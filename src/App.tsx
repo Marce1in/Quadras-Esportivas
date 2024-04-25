@@ -2,11 +2,23 @@ import  Atlas  from '../classes/atlas.ts'
 
 const atlas: Atlas = new Atlas
 
-atlas.db.criarMembro("admin", "admin", true)
+if (Object.keys(atlas.db.membros).length == 0){
+    atlas.db.criarMembro("admin", "admin", true)
 
-atlas.db.criarQuadra("Vôlei", ["09:00","20:00"], "Quadra Avenida")
-atlas.db.criarQuadra("Basquete", ["11:00","22:30"], "SenaQuadra")
-atlas.db.criarQuadra("Futebol", ["01:00","23:00"], "Angelus Quadra")
+    atlas.db.criarMembro("edelson", "123", true)
+    atlas.db.criarMembro("brunilda", "123", true)
+    atlas.db.criarMembro("angelino", "123", true)
+    atlas.db.criarMembro("gladmilson", "123", true)
+
+    //Só pro Gabriel não me chamar de puxa saco kekw
+    atlas.db.criarMembro("Kurt Cobain Tabajara", "123", true)
+}
+
+if (Object.keys(atlas.db.quadras).length == 0){
+    atlas.db.criarQuadra("Vôlei", ["09:00","20:00"], "Quadra Avenida")
+    atlas.db.criarQuadra("Basquete", ["11:00","22:30"], "SenaQuadra")
+    atlas.db.criarQuadra("Futebol", ["01:00","23:00"], "Angelus Quadra")
+}
 
 import  Home  from './paginas/Home.tsx'
 import  Login from './paginas/Login.tsx'
@@ -26,10 +38,10 @@ function App() {
 
             <Router basename='/Quadras-Esportivas'>
                 <Routes>
-                    <Route path="/" element=<Home atlas={atlas}/> />           
-                    <Route path="/login" element=<Login atlas={atlas}/> />           
-                    <Route path="/registro" element=<Registro atlas={atlas}/> />           
-                    <Route path="/admin" element=<Admin atlas={atlas}/> />           
+                    <Route path="/" element={<Home atlas={atlas}/>} />           
+                    <Route path="/login" element={<Login atlas={atlas}/>} />           
+                    <Route path="/registro" element={<Registro atlas={atlas}/>} />           
+                    <Route path="/admin" element={<Admin atlas={atlas}/>} />           
                 </Routes>
 
             </Router>

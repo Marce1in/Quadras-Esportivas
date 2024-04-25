@@ -6,13 +6,13 @@ export class Quadra {
     private horarios: number[]
     private horariosReservados: {[data: string]: number[]}
 
-    constructor(esporte: string, [horarioInicial, horarioFinal]: [string, string], apelido?: string){
+    constructor(esporte: string, [horarioInicial, horarioFinal]: [string, string], apelido?: string, horarios?: number[], horariosReservados?: {}){
         this.esporte = esporte
         this.apelido = apelido
 
-        this.horarios = this.criarHorarios([horarioInicial, horarioFinal]) 
+        this.horarios = horarios ? horarios : this.criarHorarios([horarioInicial, horarioFinal]) 
 
-        this.horariosReservados = {}
+        this.horariosReservados = horariosReservados ? horariosReservados : {}
     }
 
 

@@ -36,13 +36,75 @@ class Db {
     public reservas: {[id: string]: Reserva}
 
     constructor(){
-        [this.quadras, this.membros, this.reservas] = [{}, {}, {}]
+        const quadrasArmazenadas = localStorage.getItem('quadras')
+        const membrosArmazenados = localStorage.getItem('membros')
+        const reservasArmazenadas = localStorage.getItem('reservas')
+
+        this.quadras = quadrasArmazenadas ? this.refazerQuadras(JSON.parse(quadrasArmazenadas)) : {}
+        this.membros = membrosArmazenados ? this.refazerMembros(JSON.parse(membrosArmazenados)) : {}
+        this.reservas = reservasArmazenadas ? this.refazerReservas(JSON.parse(reservasArmazenadas)) : {}
     }
+
+    private salvarDados() {
+        localStorage.setItem('quadras', JSON.stringify(this.quadras))
+        localStorage.setItem('membros', JSON.stringify(this.membros))
+        localStorage.setItem('reservas', JSON.stringify(this.reservas))
+    }
+
+    private refazerQuadras(quadras: any): {[id: string]: Quadra} {
+
+        const reQuadra: {[id: string]: Quadra} = {}
+
+        Object.keys(quadras).map((key) => {
+            const id = key
+            const esporte = quadras[key].esporte
+            const apelido = quadras[key].apelido
+            const horarios = quadras[key].horarios
+            const horariosReservados = quadras[key].horariosReservados
+
+            reQuadra[id] = new Quadra(esporte, ["",""], apelido, horarios, horariosReservados)
+        })
+
+        console.log(reQuadra)
+        return reQuadra
+    }
+
+    private refazerMembros(membros: any): {[id: string]: Membro} {
+        const reMembro: {[id: string]: Membro} = {}
+
+        Object.keys(membros).map((key) => {
+            const id = key
+            const nome = membros[key].nome
+            const senha = membros[key].senha
+            const admin = membros[key].admin
+
+            reMembro[id] = new Membro(nome, senha, admin)
+        })
+
+        return reMembro
+    }
+
+    private refazerReservas(reservas: any): {[id: string]: Reserva} {
+        const reReserva: {[id: string]: Reserva} = {}
+
+        Object.keys(reReserva).map((key) => {
+            const id = key
+            const horario = reservas[key].horario
+            const data = reservas[key].data
+            const idMembro = reservas[key].idMembro
+            const idQuadra = reservas[key].idQuadra
+
+            reReserva[id] = new Reserva(horario, data, idMembro, idQuadra)
+        })
+
+        return reReserva
+    }   
 
     public criarMembro(nome: string, senha: string, admin = false): string{
         const id: string = faker.string.uuid()
 
         this.membros[id] = new Membro(nome, senha, admin)
+        this.salvarDados()
 
         return id
     }
@@ -51,6 +113,7 @@ class Db {
         const id: string = faker.string.uuid()
 
         this.quadras[id] = new Quadra(esporte, horario, apelido)
+        this.salvarDados()
 
         return id
     }
@@ -62,19 +125,44 @@ class Db {
         this.reservas[id] = new Reserva([hi, hf], data, idMembro, idQuadra)
 
         this.quadras[idQuadra].reservar([hi, hf], data)
+        this.salvarDados()
+
     }
 
+    //Eu sei que tem como transformar tudo isso em uma só função, porém...
+    //sem tempo irmão
     public deletarQuadra(idQuadra: string){
 
         delete this.quadras[idQuadra]
+        this.salvarDados()
     }
     public deletarMembro(idMembro: string){
 
         delete this.membros[idMembro]
+        this.salvarDados()
     }
     public deletarReserva(idReserva: string){
 
         delete this.reservas[idReserva]
+        this.salvarDados()
+    }
+
+    //DELETA TUDO!!!!
+    public DELETARTUDO(flag: string){
+        if (flag == 'Q'){
+            this.quadras = {}
+        }
+        else if (flag == 'M'){
+            this.membros = {}
+        }
+        else if (flag == 'R'){
+            this.reservas = {}
+        }
+        else {
+            throw Error("Flag incorreta! 'Q' para quadras, 'M' para membros 'R' para reservas")
+        }
+
+        this.salvarDados()
     }
 
     //Q para quadras, R para reservas, M para membros
