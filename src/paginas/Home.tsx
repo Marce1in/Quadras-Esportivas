@@ -20,7 +20,7 @@ function Home({atlas}: {atlas: Atlas}){
     const {register, handleSubmit, reset} = useForm()
 
     //Pega a data atual do computador em formato ISO YYYY/DD/MM
-    const dataHoje = new Date().toISOString().split("T", 1)[0];
+    const dataHoje = new Date().toISOString().split("T", 1)[0]
 
     //Controla o fechamento e abertura dos pop-ups
     const [estadoQ, abrirQuadra] = useState(false)
@@ -44,20 +44,26 @@ function Home({atlas}: {atlas: Atlas}){
     function reservar(data: any, reset: any){
 
         //Solução porca pacas, mais to sem tempo irmão
-        if (data.hi == "Horário Inicial" || data.hf == "Horário Final") return
+        if (data.hi == "Horário Inicial" || data.hf == "Horário Final"){
+            alert("Você precisa selecionar um horário!")
+            return
+        }
 
         const usuario: string = atlas.contas.sessao
         const quadra: string = chave
 
         atlas.db.fazerReserva(usuario, quadra, [data.hi, data.hf], data.data)
 
+
         //Reseta o formulário
         setData(dataHoje)
         reset()
     }
 
-    function cancelarReserva(id: string){
+    function cancelarReserva(id: string, horarios: string[], data: string, idQuadra: string){
         atlas.db.deletarReserva(id)
+
+        atlas.db.quadras[idQuadra].deletarReserva(horarios as [string, string], data)
 
         //PQ DIABOS REACT N TEM UM JEITO DE FORÇAR RECARREGAR O COMPONENTE MANUALMENTE???
         //EU N QUERO CRIAR 10000 STATE PRA CADA COISINHA VEI,
@@ -209,7 +215,7 @@ function Home({atlas}: {atlas: Atlas}){
                                     <span className='text-base/5 font-medium text-center'>
                                         Entre 
                                         <strong>{item.horario[0]}</strong> 
-                                        e 
+                                        &nbsp;e&nbsp; 
                                         <strong>{item.horario[1]}</strong>
                                     </span>
                                     <h2 className='card-title text-primary justify-center'>
@@ -228,7 +234,7 @@ function Home({atlas}: {atlas: Atlas}){
                                     </span>
                                     <button 
                                         className="btn btn-error" 
-                                        onClick={() => cancelarReserva(reservasChaves[i])}
+                                        onClick={() => cancelarReserva(reservasChaves[i], [item.horario[0], item.horario[1]], item.data, item.idQuadra)}
                                     >
                                         Cancelar
                                     </button>

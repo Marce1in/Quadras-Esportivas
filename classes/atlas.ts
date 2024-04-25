@@ -39,10 +39,10 @@ class Db {
         [this.quadras, this.membros, this.reservas] = [{}, {}, {}]
     }
 
-    public criarMembro(nome: string): string{
+    public criarMembro(nome: string, senha: string, admin = false): string{
         const id: string = faker.string.uuid()
 
-        this.membros[id] = new Membro(nome)
+        this.membros[id] = new Membro(nome, senha, admin)
 
         return id
     }
@@ -130,7 +130,7 @@ class Gerador {
 
         for (let i = 0; i < NUM_QUADRAS_GERADAS; i++){
             const esporte: string = faker.helpers.arrayElement(["Futebol", "Basquete", "Volêi", "Padel"])
-            const apelido: string = faker.lorem.words({min: 1, max: 3})
+            const apelido: string = faker.lorem.words({min: 1, max: 2})
 
             const horarioI = faker.helpers.arrayElement(["07:00", "08:00", "10:00", "11:30"])
             const horarioF = faker.helpers.arrayElement(["19:30", "20:00", "22:00", "18:00"])
@@ -139,7 +139,7 @@ class Gerador {
             // const intervalo1: [string, string] = ["12:00", "13:30"]
             // const intervalo2: [string, string] = ["16:30", "17:30"]
 
-            const id: string = this.db.criarQuadra(esporte, horarios, apelido)
+            this.db.criarQuadra(esporte, horarios, apelido)
 
             // this.db.quadras[id].criarIntervalo(intervalo1)
             // this.db.quadras[id].criarIntervalo(intervalo2)
@@ -149,8 +149,9 @@ class Gerador {
 
         for (let i = 0; i < NUM_MEMBROS_GERADOS; i++){
             const nome: string = fakerPT_BR.person.firstName()
+            const senha: string = fakerPT_BR.person.zodiacSign()
 
-            this.db.criarMembro(nome)
+            this.db.criarMembro(nome, senha, false)
         }
 
     }
@@ -164,7 +165,9 @@ class Gerador {
             const alugado: [string, string]= faker.helpers.arrayElement(
                 [["09:00","10:00"],["14:30", "15:00"],["18:30", "20:00"]]) 
 
-            this.db.fazerReserva(membroId, quadraId, alugado, "2004-14-10")
+            const data = faker.date.soon({days: 90}).toISOString().split("T", 1)[0]
+
+            this.db.fazerReserva(membroId, quadraId, alugado, data)
         }
     }
 }
@@ -182,15 +185,35 @@ class Contas {
         this.db = db
     }
 
-    public registrar(){
+    public registrar(nome: string, senha: string){
+        let existe: boolean = false
 
+        Object.keys(this.db.membros).map(item => {
+            if (this.db.membros[item].nome == nome){
+                alert("Esse usuário já existe!")
+                existe = true
+            }
+        })
+
+        if (existe) return false
+
+        this.db.criarMembro(nome, senha)
+
+        return true
     }
 
-    public logar(){
+    public logar(nome: string, senha: string){
+
+        Object.keys(this.db.membros).map(item => {
+            if (this.db.membros[item].nome == nome && this.db.membros[item].senha == senha){
+
+                this.sessao = item
+            }
+        })
 
     }
 
     public deslogar(){
-
+        this.sessao = ""
     }
 }

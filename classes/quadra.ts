@@ -26,6 +26,7 @@ export class Quadra {
         }
 
         this.horariosReservados[data] = this.criarHorarios([horarioInicial, horarioFinal])
+
     }
 
 

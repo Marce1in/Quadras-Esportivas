@@ -1,13 +1,12 @@
-import { useEffect } from 'react'
-
 import  Atlas  from '../classes/atlas.ts'
 
 const atlas: Atlas = new Atlas
 
-atlas.gerar.quadras(5)
-atlas.gerar.membros(5)
-atlas.gerar.reservas(1)
+atlas.db.criarMembro("admin", "admin", true)
 
+atlas.db.criarQuadra("Vôlei", ["09:00","20:00"], "Quadra Avenida")
+atlas.db.criarQuadra("Basquete", ["11:00","22:30"], "SenaQuadra")
+atlas.db.criarQuadra("Futebol", ["01:00","23:00"], "Angelus Quadra")
 
 import  Home  from './paginas/Home.tsx'
 import  Login from './paginas/Login.tsx'
