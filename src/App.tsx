@@ -1,10 +1,12 @@
+import { useEffect } from 'react'
+
 import  Atlas  from '../classes/atlas.ts'
 
 const atlas: Atlas = new Atlas
 
-atlas.gerar.quadras(50)
+atlas.gerar.quadras(5)
 atlas.gerar.membros(5)
-atlas.gerar.reservas(3)
+atlas.gerar.reservas(1)
 
 
 import  Home  from './paginas/Home.tsx'
@@ -15,7 +17,6 @@ import  Admin  from './paginas/Admin.tsx'
 import {
     BrowserRouter as Router,
     Route,
-    Link,
     Routes,
 } from "react-router-dom";
 
@@ -31,6 +32,7 @@ function App() {
                     <Route path="/registro" element=<Registro atlas={atlas}/> />           
                     <Route path="/admin" element=<Admin atlas={atlas}/> />           
                 </Routes>
+
             </Router>
 
         </>

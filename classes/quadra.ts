@@ -22,10 +22,6 @@ export class Quadra {
 
             this.horariosReservados[data].push(...this.criarHorarios([horarioInicial, horarioFinal]))
 
-            //Organiza a array em ordem do menor para o maior.
-            //É necessário para o método 'filtrarHorarios' funcionar corretamente!
-            this.horariosReservados[data].sort((x, y) => x - y)
-
             return
         }
 
@@ -199,21 +195,14 @@ export class Quadra {
         return horariosFormatados
     }
 
-    //Filtra com complexidade linear, O(n)
     private filtrarHorarios(horarios: number[], filtro: number[]): number[]{
 
-        if (filtro == undefined)
-            throw Error("Erro! não existe nenhum horário reservado nessa data!")
+        if (filtro == undefined){
+            console.log("Não existem horários reservados com essa data...")
+            return [...horarios]
+        }
 
-        let i: number = 0;
-
-        return horarios.flatMap((item) => {
-
-            if (item == filtro[i]) return [] 
-
-            i++;
-            return [item]
-        })
+        return horarios.filter(item => !filtro.includes(item))
     }
 
     //Helper que adiciona um zero na frente do número se ele ser menor que 10

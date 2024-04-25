@@ -36,7 +36,7 @@ class Db {
     public reservas: {[id: string]: Reserva}
 
     constructor(){
-        [this.quadras, this.membros, this.reservas] = [{}, {} , {}]
+        [this.quadras, this.membros, this.reservas] = [{}, {}, {}]
     }
 
     public criarMembro(nome: string): string{
@@ -46,6 +46,7 @@ class Db {
 
         return id
     }
+
     public criarQuadra(esporte: string, horario: [string, string], apelido?: string): string{
         const id: string = faker.string.uuid()
 
@@ -53,9 +54,66 @@ class Db {
 
         return id
     }
-    public fazerReserva(idMembro: string, idQuadra: string, horario: [string, string]){
 
-        this.reservas[idMembro + idQuadra] = new Reserva(horario)
+    //SIM, 'hi' e 'hf' são: horário Inicial e horário Final, EU NAO AGUENTO MAIS ESCREVER VARIAVEIS LONGAS
+    public fazerReserva(idMembro: string, idQuadra: string, [hi, hf]: [string, string], data: string){
+        const id: string = faker.string.uuid()
+
+        this.reservas[id] = new Reserva([hi, hf], data, idMembro, idQuadra)
+
+        this.quadras[idQuadra].reservar([hi, hf], data)
+    }
+
+    public deletarQuadra(idQuadra: string){
+
+        delete this.quadras[idQuadra]
+    }
+    public deletarMembro(idMembro: string){
+
+        delete this.membros[idMembro]
+    }
+    public deletarReserva(idReserva: string){
+
+        delete this.reservas[idReserva]
+    }
+
+    //Q para quadras, R para reservas, M para membros
+    public obterPorId(flag: string, id: string){
+
+        if (flag == 'Q'){
+            const keys = Object.keys(this.quadras)
+            const index = keys.indexOf(id)
+
+            if (index == undefined){
+                return index
+            }
+
+            return this.quadras[keys[index]]
+        }
+        else if (flag == 'R'){
+            const keys = Object.keys(this.reservas)
+            const index = keys.indexOf(id)
+
+            if (index == undefined){
+                return index
+            }
+
+            return this.reservas[keys[index]]
+        }
+        else if (flag == 'M'){
+            const keys = Object.keys(this.membros)
+            const index = keys.indexOf(id)
+
+            if (index == undefined){
+                return index
+            }
+
+            return this.membros[keys[index]]
+        }
+        else{
+            throw Error("Flag incorreta! 'Q' para quadras, 'M' para membros 'R' para reservas")
+        }
+
     }
 }
 
@@ -78,13 +136,13 @@ class Gerador {
             const horarioF = faker.helpers.arrayElement(["19:30", "20:00", "22:00", "18:00"])
             const horarios: [string, string] = [horarioI, horarioF]
 
-            const intervalo1: [string, string] = ["12:00", "13:30"]
-            const intervalo2: [string, string] = ["16:30", "17:30"]
+            // const intervalo1: [string, string] = ["12:00", "13:30"]
+            // const intervalo2: [string, string] = ["16:30", "17:30"]
 
             const id: string = this.db.criarQuadra(esporte, horarios, apelido)
 
-            this.db.quadras[id].criarIntervalo(intervalo1)
-            this.db.quadras[id].criarIntervalo(intervalo2)
+            // this.db.quadras[id].criarIntervalo(intervalo1)
+            // this.db.quadras[id].criarIntervalo(intervalo2)
         } 
     }
     public membros(NUM_MEMBROS_GERADOS: number){
@@ -106,7 +164,7 @@ class Gerador {
             const alugado: [string, string]= faker.helpers.arrayElement(
                 [["09:00","10:00"],["14:30", "15:00"],["18:30", "20:00"]]) 
 
-            this.db.fazerReserva(membroId, quadraId, alugado)
+            this.db.fazerReserva(membroId, quadraId, alugado, "2004-14-10")
         }
     }
 }
